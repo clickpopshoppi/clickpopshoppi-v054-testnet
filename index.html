@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Pop Shop Pi - Super App V0.5.4 Ready for Test</title>
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script> 
+    <style>
+        /* CSS เพื่อ UI ที่ดีและทันสมัย */
+        body { font-family: 'Arial', sans-serif; text-align: center; padding: 0; margin: 0; background-color: #f7f7fa; color: #333; }
+        .header { background-color: #A348CC; color: white; padding: 15px 0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; justify-content: space-between; align-items: center; }
+        .header h1 { font-size: 18px; margin: 0 auto; }
+        .mic-icon-top { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: white; }
+        .status-bar { padding: 8px; font-size: 12px; background-color: #e0f7e9; color: #1b5e20; }
+        .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
+        .feature-card { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); cursor: pointer; }
+        .auth-button { margin-top: 20px; padding: 12px 25px; background-color: #A348CC; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <span style="visibility: hidden;">--</span>
+        <h1>Click Pop Shop Pi</h1>
+        <div class="mic-icon-top" id="mic_button">🎤</div>
+    </div>
+
+    <div class="status-bar" id="pi_status_bar">
+        ⚙️ Status: Initializing Pi SDK...
+    </div>
+
+    <div class="feature-grid">
+        <div class="feature-card" onclick="alert('Navigating to Shop (E-commerce Core Logic)')">
+            <span class="icon">🛍️</span><h3>Shop</h3>
+        </div>
+        <div class="feature-card" onclick="alert('Navigating to Live Stream (Live Commerce)')">
+            <span class="icon">▶️</span><h3>Live</h3>
+        </div>
+        <div class="feature-card" onclick="alert('Navigating to Review Center (Transparency Logic)')">
+            <span class="icon">⭐</span><h3>Review</h3>
+        </div>
+        <div class="feature-card" onclick="alert('Navigating to Staking (Pi Economy)')">
+            <span class="icon">💎</span><h3>Stake</h3>
+        </div>
+    </div>
+    
+    <button class="auth-button" id="auth_button" disabled>
+        Click to Connect Pi Wallet (Required for Test Token)
+    </button>
+    
+    <script>
+        const APP_VERSION = "0.5.4";
+        const PROTOCOL_VERSION = "23";
+        
+        // 1. Pi SDK Initialization (Sandbox Mode)
+        Pi.init({
+            version: "2.0",
+            sandbox: true, // ตั้งค่าเป็น TRUE เพื่อรันในโหมด Sandbox
+            onReady: function () {
+                document.getElementById('pi_status_bar').innerText = `✅ Pi SDK Ready (V${APP_VERSION} / Protocol ${PROTOCOL_VERSION} / Sandbox)`;
+                document.getElementById('auth_button').disabled = false;
+                document.getElementById('auth_button').innerText = "✅ Connect Pi Wallet (Test Token Ready)";
+            },
+            onError: function(error) {
+                document.getElementById('pi_status_bar').innerText = `❌ ERROR: Pi SDK Failed! (${error.message})`;
+            }
+        });
+
+        // 2. Logic การเชื่อมต่อ Wallet / การรับรองสิทธิ์ (Authentication) - สำหรับขั้นตอน Test Token
+        document.getElementById('auth_button').addEventListener('click', function() {
+            // โค้ดนี้จะเปิดหน้าจอ Wallet/Authentication เพื่อให้ผ่านขั้นตอน Test Token
+            Pi.authenticate(['username', 'payments'], function(user) {
+                alert('Authentication Successful! User: ' + user.username);
+                // เมื่อรับรองสิทธิ์สำเร็จ ถือว่าผ่านขั้นตอน Test Token แล้ว
+            }, function(error) {
+                alert('Authentication Failed: ' + error.message);
+            });
+        });
+        
+        // 3. Voice Input / Mic Feature Setup
+        document.getElementById('mic_button').addEventListener('click', function() {
+            this.style.color = '#FFD700'; 
+            alert('Voice Input Activated! Say Shop, Live, or Review.');
+            setTimeout(() => {
+                this.style.color = 'white';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
