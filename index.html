@@ -3,85 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Click Pop Shop Pi - Final Master</title>
+    <title>Click Pop Shop Pi - The Archival Standard V25</title>
     <meta name="pi-app-id" content="clickpopshoppi-master-v1" />
     <meta name="pi-app-version" content="0.5.4" />
     <meta name="pi-protocol" content="23" />
     <meta name="keywords" content="Pi Network, Social Commerce, GCV, 314159, Decentralized Trade, Asset Services">
+    
     <script src="https://sdk.minepi.com/pi-sdk.js"></script> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        /* === FINAL STYLE TOKENS & LAYOUT (V20) === */
+        /* ==========================================================
+           === CSS ARCHITECTURE: UNIVERSAL PIXEL-PERFECT (V25) ===
+           ========================================================== */
         :root {
-            --color-gold: #FFD700;
+            /* 1. COLOR TOKENS (HEX Precision) */
+            --color-gold: #FFD700; /* Primary Pi Gold */
             --color-dark-gold: #C5A059;
-            --color-dark-bg: #1A0528; 
-            --color-nav-bg: rgba(15, 5, 24, 0.98);
+            --color-primary-violet: #6200EA; /* Deep Action Violet */
+            --color-dark-bg: #1A0528; /* Primary BG Color (Deep Violet/Black) */
+            --color-nav-bg: rgba(15, 5, 24, 0.98); /* Translucent Header/Footer */
             --color-neon-violet: rgba(138, 43, 226, 0.6);
+
+            /* 2. LAYOUT METRICS (REM/PIXEL Precision) */
             --coin-size: 120px;
             --nav-height: 80px;
             --header-offset: 100px;
+            --font-size-base: 16px;
         }
+        
         body { 
             font-family: 'Noto Sans Thai', sans-serif; text-align: center; margin: 0; padding: 0; 
             background: linear-gradient(180deg, #0F0518 0%, var(--color-dark-bg) 100%); color: white; 
             overflow-x: hidden; padding-bottom: 1px;
+            font-size: var(--font-size-base);
         }
+        
+        /* Typography */
         .text-gold { color: var(--color-gold); }
+        .headline { font-size: 1.6rem; font-weight: 900; margin-bottom: 0.3125rem; } 
+        .sub-headline { font-size: 0.75rem; font-weight: 500; margin-bottom: 1.5625rem; } 
+
+        /* Header Bar (Fixed position, Z-index High) */
         .header-bar {
-            position: fixed; top: 0; width: 100%; height: 60px; padding-top: 40px; display: flex; 
-            justify-content: space-between; align-items: flex-end; padding-left: 16px; padding-right: 16px; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 60px; padding-top: 40px; 
+            display: flex; justify-content: space-between; align-items: flex-end; 
+            padding-left: 16px; padding-right: 16px; 
             background: var(--color-nav-bg); box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5); z-index: 1000;
         }
-        .wallet-btn { padding: 8px 16px; background: linear-gradient(90deg, #6200EA, #B388FF); color: white; border-radius: 20px; font-weight: 600; font-size: 13px; text-decoration: none; }
-        .container { padding-top: var(--header-offset); padding-bottom: 160px; max-width: 100vw; }
+        .wallet-btn { padding: 8px 16px; background: linear-gradient(90deg, var(--color-primary-violet), #B388FF); color: white; border-radius: 20px; font-weight: 600; font-size: 0.8125rem; text-decoration: none; }
         
-        /* HERO & GCV */
-        .hero-section { padding-top: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .pi-coin { width: var(--coin-size); height: var(--coin-size); border-radius: 50%; background: radial-gradient(circle at center, var(--color-gold) 30%, var(--color-dark-gold) 80%); animation: spin 12s linear infinite; margin-bottom: 15px; overflow: hidden; }
-        .gcv-badge { color: var(--color-gold); border: 1px solid var(--color-gold); padding: 8px 16px; border-radius: 16px; font-size: 14px; font-weight: 700; background: rgba(0, 0, 0, 0.5); margin-bottom: 30px; }
+        /* Main Content Container */
+        .container { 
+            padding-top: var(--header-offset); 
+            padding-bottom: 160px; /* Space for fixed bottom elements */
+            max-width: 100vw; 
+        }
+        
+        /* PI Coin - Architectural Animation */
+        .pi-coin { 
+            width: var(--coin-size); height: var(--coin-size); border-radius: 50%; 
+            background: radial-gradient(circle at center, var(--color-gold) 30%, var(--color-dark-gold) 80%); 
+            animation: spin 12s linear infinite; margin-bottom: 15px; overflow: hidden; 
+            box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.3);
+        }
+        .gcv-badge { 
+            color: var(--color-gold); border: 1px solid var(--color-gold); padding: 8px 16px; 
+            border-radius: 16px; font-size: 0.875rem; font-weight: 700; 
+            background: rgba(0, 0, 0, 0.5); margin-bottom: 30px; 
+            filter: drop-shadow(0 0 1px var(--color-gold));
+        }
 
-        /* MENU GRID */
+        /* Menu Grid */
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 16px; }
         .menu-card {
             height: 115px; border-radius: 24px; padding: 15px;
             background: linear-gradient(145deg, #3E104F 0%, #180526 100%);
-            box-shadow: 0px 15px 30px -5px rgba(0, 0, 0, 0.7), 0 0 20px 2px var(--color-neon-violet); 
+            box-shadow: 0px 10px 20px -5px rgba(0, 0, 0, 0.7), 0 0 15px 1px var(--color-neon-violet); 
             border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
         }
         .card-icon { color: var(--color-gold); font-size: 32px; filter: drop-shadow(0 0 1px var(--color-gold)); }
 
-        /* BOTTOM FIXED BARS */
-        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: var(--nav-height); background: var(--color-nav-bg); border-top: 1px solid var(--color-gold); z-index: 1000; display: flex; justify-content: space-around; align-items: center; }
-        .nav-item { color: var(--color-gold); text-align: center; font-size: 10px; filter: drop-shadow(0 0 1px var(--color-gold)); }
-        .accessibility-fab { position: fixed; bottom: 100px; left: 20px; width: 50px; height: 50px; border-radius: 50%; background: var(--color-nav-bg); border: 1px solid var(--color-gold); z-index: 5000; display: flex; justify-content: center; align-items: center; }
+        /* Fixed Footer & FAB */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: var(--nav-height); z-index: 1000; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid var(--color-gold); background: var(--color-nav-bg); }
+        .nav-item { color: var(--color-gold); text-align: center; font-size: 0.625rem; filter: drop-shadow(0 0 1px var(--color-gold)); }
+        .accessibility-fab { position: fixed; bottom: 120px; left: 20px; width: 50px; height: 50px; border-radius: 50%; background: var(--color-nav-bg); border: 1px solid var(--color-gold); z-index: 5000; display: flex; justify-content: center; align-items: center; }
         
-        /* POLICY MODAL STYLING */
-        .policy-modal-overlay { position: fixed; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-        .policy-card { width: 90%; max-width: 400px; background-color: #150518; border: 2px solid var(--color-gold); border-radius: 24px; padding: 30px; color: white; text-align: center; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
-        .gold-btn { background: linear-gradient(90deg, var(--color-gold), #FDB931); color: var(--color-dark-bg); width: 100%; padding: 12px; border-radius: 30px; border: none; font-weight: 700; }
-        .transparent-btn { background: transparent; color: white; border: 1px solid rgba(255, 255, 255, 0.3); width: 100%; padding: 12px; border-radius: 30px; margin-top: 10px; }
+        /* Policy Modal */
+        .policy-modal-overlay { position: fixed; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.95); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .policy-card { 
+            width: 90%; max-width: 400px; background-color: #150518; border: 2px solid var(--color-gold); border-radius: 24px; 
+            padding: 30px; padding-bottom: 50px; color: white; text-align: center; 
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); 
+        }
+        .gold-btn { 
+            background: linear-gradient(90deg, var(--color-gold), #FDB931); 
+            color: var(--color-dark-bg); width: 100%; padding: 12px; border-radius: 30px; border: none; font-weight: 700; font-size: 1rem; 
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+        }
+        .transparent-btn { 
+            background: transparent; color: white; border: 1px solid rgba(255, 255, 255, 0.3); 
+            width: 100%; padding: 12px; border-radius: 30px; font-size: 1rem; margin-top: 10px; 
+        }
 
+        /* Animations */
         @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
     </style>
 </head>
 <body>
     <div class="policy-modal-overlay" id="policy_modal">
         <div class="policy-card">
-            <span class="material-icons policy-icon">policy</span>
-            <h2 class="policy-title text-gold" style="font-size: 20px;">การันตีความยุติธรรมดิจิทัล</h2>
-            <p class="text-gold" style="font-size: 14px; margin-bottom: 15px;">
+            <span class="material-icons policy-icon" style="color: var(--color-gold); font-size: 40px; margin-bottom: 5px;">policy</span>
+            
+            <h2 class="policy-title text-gold" style="font-size: 1.25rem; font-weight: 700; margin-bottom: 5px;">การันตีความยุติธรรมดิจิทัล</h2>
+            
+            <p class="text-gold" style="font-size: 0.875rem; margin-bottom: 15px;">
                 ยินดีต้อนรับสู่ยุคใหม่ของ Super App ที่สร้างมาเพื่อปกป้องคุณ. เราให้คำมั่นสัญญาว่าศักดิ์ศรีและสิทธิของคุณจะอยู่เหนือสิ่งอื่นใด.
             </p>
-            <p style="font-size: 12px; margin-bottom: 20px; color: #CCCCCC;">
+            <p style="font-size: 0.75rem; margin-bottom: 20px; color: #CCCCCC; line-height: 1.5;">
                 เราใช้ Pi Smart Contract ในการรักษาความโปร่งใสของทุกธุรกรรม ท่านต้องยอมรับการใช้ข้อมูล KYC เพื่อความปลอดภัยตามกฎหมาย AML/CFT (FATF) ก่อนเข้าสู่ระบบ
             </p>
+            
+            <div style="margin: 20px 0 30px 0; display: flex; flex-direction: column; gap: 8px; text-align: center;">
+                <a href="https://github.com/clickpopshoppi/policies/blob/main/PRIVACY-POLICY.md" target="_blank" 
+                   style="font-size: 0.7rem; color: #B388FF; text-decoration: underline; font-weight: 500;">
+                    อ่านนโยบายความเป็นส่วนตัว (Privacy Policy)
+                </a>
+                <a href="https://github.com/clickpopshoppi/policies/blob/main/TERMS-OF-SERVICE.md" target="_blank" 
+                   style="font-size: 0.7rem; color: #B388FF; text-decoration: underline; font-weight: 500;">
+                    อ่านเงื่อนไขการใช้บริการ (Terms of Service)
+                </a>
+            </div>
+            
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button id="accept_button" class="gold-btn" disabled>ยอมรับและดำเนินการต่อ</button>
+                <button id="accept_button" class="gold-btn" disabled>กำลังตรวจสอบสถานะ Pi Network...</button>
                 <button id="decline_button" class="transparent-btn">ปฏิเสธ</button>
             </div>
-            <p style="font-size: 9px; margin-top: 15px; color: var(--color-dark-gold); opacity: 0.8;">
+            
+            <p style="font-size: 0.5625rem; margin-top: 25px; color: var(--color-dark-gold); opacity: 0.8;">
                 Copyright © 2025 Ms. Ramida Moonchai. All Rights Reserved.
             </p>
         </div>
@@ -89,8 +148,8 @@
 
     <div class="header-bar">
         <span style="display:flex; align-items: flex-end; gap: 8px;">
-            <span class="material-icons header-logo">monetization_on</span>
-            <span class="header-title">Click Pop Shop Pi</span>
+            <span class="material-icons header-logo text-gold" style="font-size: 24px;">monetization_on</span>
+            <span class="header-title" style="font-weight: 700; font-size: 1rem;">Click Pop Shop Pi</span>
         </span>
         <a href="#" class="wallet-btn">Connect Pi Wallet</a>
     </div>
@@ -101,42 +160,42 @@
             <p class="sub-headline">มิติใหม่ 360° ของ Social Commerce และ Service Excellence<br>(Your Gateway to the Future Economy)</p>
             
             <div class="pi-coin">
-                <span style="font-size: 50px; font-weight: 900; color: var(--color-dark-purple); transform: rotateY(180deg);">π</span>
+                <span style="font-size: 50px; font-weight: 900; color: var(--color-dark-bg); position: relative; top: 50%; left: 50%; transform: translate(-50%, -50%);">π</span>
             </div>
             
-            <div class="gcv-badge">✦ GCV 100% : 1 π = $314,159 USD ✦</div>
+            <div class="gcv-badge">✦ GCV 100% : 1 π = 314,159 $ ✦</div>
         </div>
 
         <div class="menu-grid">
             <div class="menu-card">
                 <span class="card-icon material-icons">language</span>
-                <span class="card-title text-gold">PopSocial</span>
-                <span class="card-subtitle">Global Network</span>
+                <span class="card-title text-gold" style="font-size: 1.1rem; font-weight: 700;">PopSocial</span>
+                <span class="card-subtitle" style="font-size: 0.75rem;">Global Network</span>
             </div>
             <div class="menu-card">
                 <span class="card-icon material-icons">business</span>
-                <span class="card-title text-gold">Pi Modern Trade Hub</span>
-                <span class="card-subtitle">Global Mall</span>
+                <span class="card-title text-gold" style="font-size: 1.1rem; font-weight: 700;">Pi Modern Trade Hub</span>
+                <span class="card-subtitle" style="font-size: 0.75rem;">Global Mall</span>
             </div>
             <div class="menu-card">
                 <span class="card-icon material-icons">local_shipping</span>
-                <span class="card-title text-gold">PiLogis Hub</span>
-                <span class="card-subtitle">Global Logistics</span>
+                <span class="card-title text-gold" style="font-size: 1.1rem; font-weight: 700;">PiLogis Hub</span>
+                <span class="card-subtitle" style="font-size: 0.75rem;">Global Logistics</span>
             </div>
             <div class="menu-card">
                 <span class="card-icon material-icons">handyman</span>
-                <span class="card-title text-gold">Pi Pro & Asset Services</span>
-                <span class="card-subtitle">Asset Management</span>
+                <span class="card-title text-gold" style="font-size: 1.1rem; font-weight: 700;">Pi Pro & Asset Services</span>
+                <span class="card-subtitle" style="font-size: 0.75rem;">Asset Management</span>
             </div>
         </div>
         
-        <p style="text-align: center; font-size: 9px; color: var(--color-dark-gold); opacity: 0.8; margin-top: 20px; padding-bottom: 10px;">
+        <p style="text-align: center; font-size: 0.5625rem; color: var(--color-dark-gold); opacity: 0.8; margin-top: 40px; padding-bottom: 10px;">
             Copyright © 2025 Ms. Ramida Moonchai. All Rights Reserved.
         </p>
     </div>
 
     <div class="accessibility-fab" id="fab_toggle">
-        <span class="fab-icon material-icons">accessibility_new</span>
+        <span class="fab-icon material-icons text-gold">accessibility_new</span>
     </div>
 
     <div class="bottom-nav">
@@ -159,77 +218,102 @@
     </div>
     
     <script>
-        // === PI SDK INITIALIZATION AND LOGIC (THE CORE) ===
-        const APP_VERSION = "0.5.4";
-        const PROTOCOL_VERSION = "23";
-        
-        let PiSdkReady = false;
+        // ==========================================================
+        // === JAVASCRIPT ARCHITECTURE: DUAL-CHECK LOGIC (V25) ===
+        // ==========================================================
+        const MANDATORY_READ_DELAY_MS = 2000; // 2.0 Seconds (LEGAL COMPLIANCE)
+        const acceptBtn = document.getElementById('accept_button');
+        const modal = document.getElementById('policy_modal');
+        const declineBtn = document.getElementById('decline_button');
 
-        // 1. SDK INIT
+        let piSdkReady = false;
+        let readingTimerDone = false;
+
+        // --- 1. Pi SDK Initialization (The Zero Latency Check) ---
         Pi.init({
             version: "2.0",
             sandbox: true,
             onReady: function () {
-                PiSdkReady = true;
+                piSdkReady = true;
                 console.log("Pi SDK Ready.");
+                checkIfReadyToProceed();
             },
             onError: function(error) {
-                console.error("Pi SDK Failed:", error.message);
-                alert('Pi SDK Failed: ' + error.message);
+                console.error("Pi SDK Initialization Failed:", error.message);
+                // Fail-safe state: Prevent app usage if SDK fails
+                acceptBtn.innerText = '❌ ระบบ Pi ล้มเหลว (Error Code: ' + error.name + ')';
+                acceptBtn.style.backgroundColor = '#cc0000'; 
+                acceptBtn.disabled = true;
             }
         });
 
-        // 2. MODAL and TRANSITION LOGIC (The Core Flow)
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const modal = document.getElementById('policy_modal');
-            const acceptBtn = document.getElementById('accept_button');
-            const declineBtn = document.getElementById('decline_button');
-            const fabToggle = document.getElementById('fab_toggle');
-
-            // --- SET INITIAL STATE ---
-            modal.style.display = 'flex'; // Show Modal on Load (Flow Logic)
-
-            // CRITICAL FIX: Lock button on load and unlock after 2s (Pi System Ready check)
-            acceptBtn.disabled = true; // Set disabled on DOM load
-            
+        // --- 2. Enforce Mandatory Reading Delay (The Legal Check) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Start the reading timer immediately upon DOM load
             setTimeout(() => {
-                 acceptBtn.disabled = false; // Unlock button after 2 seconds (Simulated Read Time)
-            }, 2000); 
+                readingTimerDone = true;
+                console.log("Mandatory Reading Delay Complete.");
+                checkIfReadyToProceed();
+            }, MANDATORY_READ_DELAY_MS);
 
-            // 1. Logic for ACCEPT (Closes modal and potentially authenticates)
-            acceptBtn.addEventListener('click', function() {
-                if (!PiSdkReady) {
-                    alert('Pi Network System is still loading. Please wait a moment.');
-                    return;
-                }
-                
-                // Pi Authentication Attempt (Test Token Flow)
-                Pi.authenticate(['username', 'payments'], function(user) {
-                    console.log('Authentication Successful! User:', user.username);
-                    // SUCCESS: Hide Modal and Reveal Home
-                    modal.style.opacity = '0';
-                    modal.style.transition = 'opacity 0.5s ease-out';
-                    setTimeout(() => {
-                        modal.style.display = 'none';
-                    }, 500);
-                }, function(error) {
-                    alert('Authentication Failed: ' + error.message + '. Please check your Pi Browser connection.');
-                });
-            });
-
-            // 2. Logic for DECLINE (App Exit)
-            declineBtn.addEventListener('click', function() {
-                alert('Policy Declined. Exiting Application.');
-                window.close(); 
-            });
-
-            // 3. Logic for FAB Toggle (Accessibility Menu)
-            fabToggle.addEventListener('click', function() {
-                alert('Accessibility Menu Pop-up Activated! (Needs further UI implementation)');
-            });
+            // --- 3. Event Listeners ---
+            acceptBtn.addEventListener('click', handleAccept);
+            declineBtn.addEventListener('click', handleDecline);
+            document.getElementById('fab_toggle').addEventListener('click', handleFabToggle);
         });
 
-        // --- CSS ANIMATION DEFINITION ---
+        // --- 4. Core Logic: Check & Unlock Button ---
+        function checkIfReadyToProceed() {
+            // Button is ONLY unlocked when BOTH Pi SDK is ready AND 2s reading time has passed.
+            if (piSdkReady && readingTimerDone) {
+                acceptBtn.disabled = false;
+                acceptBtn.innerText = '✅ ยอมรับและดำเนินการต่อ';
+                acceptBtn.style.background = 'linear-gradient(90deg, #66BB6A, #A5D6A7)'; // Green for go
+                console.log("Policy Gateway Unlocked.");
+            }
+            // Note: No 'else if' needed, as the initial loading text already covers the case where one is true and the other is false.
+        }
+        
+        // --- 5. Handlers ---
+        function handleAccept() {
+            if (acceptBtn.disabled) return; 
+            
+            acceptBtn.innerText = 'กำลังยืนยันตัวตน...';
+            acceptBtn.disabled = true;
+
+            Pi.authenticate(['username', 'payments'], 
+                function(user) {
+                    console.log('Authentication Successful! User:', user.username);
+                    // SUCCESS: Smooth transition out
+                    modal.style.opacity = '0';
+                    modal.style.transition = 'opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'; 
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                    }, 400); 
+                }, 
+                function(error) {
+                    // Fail-safe: Re-lock button and provide clear error message 
+                    acceptBtn.innerText = '⚠️ การยืนยันล้มเหลว ลองใหม่อีกครั้ง';
+                    acceptBtn.disabled = false;
+                    console.error('Authentication Failed:', error.message);
+                }
+            );
+        }
+
+        function handleDecline() {
+            alert('Policy Declined. Exiting Application.');
+            try {
+                window.close();
+            } catch (e) {
+                console.log('Cannot close window in this environment.');
+            }
+        }
+
+        function handleFabToggle() {
+            alert('Accessibility Menu Pop-up Activated! (Future Feature)');
+        }
+        
+        // --- CSS Animation Injection ---
         const styleSheet = document.styleSheets[0];
         styleSheet.insertRule(`
             @keyframes spin {
@@ -241,3 +325,4 @@
     </script>
 </body>
 </html>
+
