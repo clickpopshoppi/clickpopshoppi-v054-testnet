@@ -7,6 +7,7 @@
     <meta name="pi-app-id" content="clickpopshoppi-master-v1" />
     <meta name="pi-app-version" content="0.5.4" />
     <meta name="pi-protocol" content="23" />
+    <meta name="keywords" content="Pi Network, Social Commerce, GCV, 314159, Decentralized Trade, Asset Services">
     <script src="https://sdk.minepi.com/pi-sdk.js"></script> 
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet">
@@ -77,7 +78,7 @@
                 เราใช้ Pi Smart Contract ในการรักษาความโปร่งใสของทุกธุรกรรม ท่านต้องยอมรับการใช้ข้อมูล KYC เพื่อความปลอดภัยตามกฎหมาย AML/CFT (FATF) ก่อนเข้าสู่ระบบ
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button id="accept_button" class="gold-btn">ยอมรับและดำเนินการต่อ</button>
+                <button id="accept_button" class="gold-btn" disabled>ยอมรับและดำเนินการต่อ</button>
                 <button id="decline_button" class="transparent-btn">ปฏิเสธ</button>
             </div>
             <p style="font-size: 9px; margin-top: 15px; color: var(--color-dark-gold); opacity: 0.8;">
@@ -174,7 +175,7 @@
             },
             onError: function(error) {
                 console.error("Pi SDK Failed:", error.message);
-                alert('Pi SDK Failed: ' + error.message); // Added alert for failure
+                alert('Pi SDK Failed: ' + error.message);
             }
         });
 
@@ -183,9 +184,17 @@
             const modal = document.getElementById('policy_modal');
             const acceptBtn = document.getElementById('accept_button');
             const declineBtn = document.getElementById('decline_button');
+            const fabToggle = document.getElementById('fab_toggle');
 
             // --- SET INITIAL STATE ---
             modal.style.display = 'flex'; // Show Modal on Load (Flow Logic)
+
+            // CRITICAL FIX: Lock button on load and unlock after 2s (Pi System Ready check)
+            acceptBtn.disabled = true; // Set disabled on DOM load
+            
+            setTimeout(() => {
+                 acceptBtn.disabled = false; // Unlock button after 2 seconds (Simulated Read Time)
+            }, 2000); 
 
             // 1. Logic for ACCEPT (Closes modal and potentially authenticates)
             acceptBtn.addEventListener('click', function() {
@@ -205,7 +214,6 @@
                     }, 500);
                 }, function(error) {
                     alert('Authentication Failed: ' + error.message + '. Please check your Pi Browser connection.');
-                    // FAILED: Modal remains open
                 });
             });
 
@@ -216,7 +224,7 @@
             });
 
             // 3. Logic for FAB Toggle (Accessibility Menu)
-            document.getElementById('fab_toggle').addEventListener('click', function() {
+            fabToggle.addEventListener('click', function() {
                 alert('Accessibility Menu Pop-up Activated! (Needs further UI implementation)');
             });
         });
