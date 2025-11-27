@@ -1,49 +1,158 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click Pop Shop Pi - Super App V0.5.4 Ready for Test</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Click Pop Shop Pi - Final Master</title>
     <script src="https://sdk.minepi.com/pi-sdk.js"></script> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS เพื่อ UI ที่ดีและทันสมัย */
-        body { font-family: 'Arial', sans-serif; text-align: center; padding: 0; margin: 0; background-color: #f7f7fa; color: #333; }
-        .header { background-color: #A348CC; color: white; padding: 15px 0; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; justify-content: space-between; align-items: center; }
-        .header h1 { font-size: 18px; margin: 0 auto; }
-        .mic-icon-top { position: absolute; right: 20px; top: 15px; font-size: 24px; cursor: pointer; color: white; }
-        .status-bar { padding: 8px; font-size: 12px; background-color: #e0f7e9; color: #1b5e20; }
-        .feature-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 20px; }
-        .feature-card { background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); cursor: pointer; }
-        .auth-button { margin-top: 20px; padding: 12px 25px; background-color: #A348CC; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; }
+        /* === FINAL STYLE TOKENS & LAYOUT (V20) === */
+        :root {
+            --color-gold: #FFD700;
+            --color-dark-gold: #C5A059;
+            --color-dark-bg: #1A0528; 
+            --color-nav-bg: rgba(15, 5, 24, 0.98);
+            --color-neon-violet: rgba(138, 43, 226, 0.6);
+            --coin-size: 120px;
+            --nav-height: 80px;
+            --header-offset: 100px;
+        }
+        body { 
+            font-family: 'Noto Sans Thai', sans-serif; text-align: center; margin: 0; padding: 0; 
+            background: linear-gradient(180deg, #0F0518 0%, var(--color-dark-bg) 100%); color: white; 
+            overflow-x: hidden; padding-bottom: 1px;
+        }
+        .text-gold { color: var(--color-gold); }
+        .header-bar {
+            position: fixed; top: 0; width: 100%; height: 60px; padding-top: 40px; display: flex; 
+            justify-content: space-between; align-items: flex-end; padding-left: 16px; padding-right: 16px; 
+            background: var(--color-nav-bg); box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5); z-index: 1000;
+        }
+        .wallet-btn { padding: 8px 16px; background: linear-gradient(90deg, #6200EA, #B388FF); color: white; border-radius: 20px; font-weight: 600; font-size: 13px; text-decoration: none; }
+        .container { padding-top: var(--header-offset); padding-bottom: 160px; /* Space for Nav + Toggle */ max-width: 100vw; }
+        
+        /* HERO & GCV */
+        .hero-section { padding-top: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .pi-coin { width: var(--coin-size); height: var(--coin-size); border-radius: 50%; background: radial-gradient(circle at center, var(--color-gold) 30%, var(--color-dark-gold) 80%); animation: spin 12s linear infinite; margin-bottom: 15px; overflow: hidden; }
+        .gcv-badge { color: var(--color-gold); border: 1px solid var(--color-gold); padding: 8px 16px; border-radius: 16px; font-size: 14px; font-weight: 700; background: rgba(0, 0, 0, 0.5); margin-bottom: 30px; }
+
+        /* MENU GRID */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 16px; }
+        .menu-card {
+            height: 115px; border-radius: 24px; padding: 15px;
+            background: linear-gradient(145deg, #3E104F 0%, #180526 100%);
+            box-shadow: 0px 15px 30px -5px rgba(0, 0, 0, 0.7), 0 0 20px 2px var(--color-neon-violet); 
+            border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+        }
+        .card-icon { color: var(--color-gold); font-size: 32px; filter: drop-shadow(0 0 1px var(--color-gold)); }
+
+        /* BOTTOM FIXED BARS */
+        .bottom-nav { position: fixed; bottom: 0; width: 100%; height: var(--nav-height); background: var(--color-nav-bg); border-top: 1px solid var(--color-gold); z-index: 1000; display: flex; justify-content: space-around; align-items: center; }
+        .nav-item { color: var(--color-gold); text-align: center; font-size: 10px; filter: drop-shadow(0 0 1px var(--color-gold)); }
+        .accessibility-fab { position: fixed; bottom: 100px; left: 20px; width: 50px; height: 50px; border-radius: 50%; background: var(--color-nav-bg); border: 1px solid var(--color-gold); z-index: 5000; display: flex; justify-content: center; align-items: center; }
+        
+        /* POLICY MODAL STYLING */
+        .policy-modal-overlay { position: fixed; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .policy-card { width: 90%; max-width: 400px; background-color: #150518; border: 2px solid var(--color-gold); border-radius: 24px; padding: 30px; color: white; text-align: center; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); }
+        .gold-btn { background: linear-gradient(90deg, var(--color-gold), #FDB931); color: var(--color-dark-bg); width: 100%; padding: 12px; border-radius: 30px; border: none; font-weight: 700; }
+        .transparent-btn { background: transparent; color: white; border: 1px solid rgba(255, 255, 255, 0.3); width: 100%; padding: 12px; border-radius: 30px; margin-top: 10px; }
+
+        @keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
     </style>
 </head>
 <body>
-
-    <div class="header">
-        <span style="visibility: hidden;">--</span>
-        <h1>Click Pop Shop Pi</h1>
-        <div class="mic-icon-top" id="mic_button">🎤</div>
-    </div>
-
-    <div class="status-bar" id="pi_status_bar">
-        ⚙️ Status: Initializing Pi SDK...
-    </div>
-
-    <div class="feature-grid">
-        <div class="feature-card" onclick="alert('Navigating to Shop (E-commerce Core Logic)')">
-            <span class="icon">🛍️</span><h3>Shop</h3>
-        </div>
-        <div class="feature-card" onclick="alert('Navigating to Live Stream (Live Commerce)')">
-            <span class="icon">▶️</span><h3>Live</h3>
-        </div>
-        <div class="feature-card" onclick="alert('Navigating to Review Center (Transparency Logic)')">
-            <span class="icon">⭐</span><h3>Review</h3>
-        </div>
-        <div class="feature-card" onclick="alert('Navigating to Staking (Pi Economy)')">
-            <span class="icon">💎</span><h3>Stake</h3>
+    <div class="policy-modal-overlay" id="policy_modal">
+        <div class="policy-card">
+            <span class="material-icons policy-icon">policy</span>
+            <h2 class="policy-title text-gold" style="font-size: 20px;">การันตีความยุติธรรมดิจิทัล</h2>
+            <p class="text-gold" style="font-size: 14px; margin-bottom: 15px;">
+                ยินดีต้อนรับสู่ยุคใหม่ของ Super App ที่สร้างมาเพื่อปกป้องคุณ. เราให้คำมั่นสัญญาว่าศักดิ์ศรีและสิทธิของคุณจะอยู่เหนือสิ่งอื่นใด.
+            </p>
+            <p style="font-size: 12px; margin-bottom: 20px; color: #CCCCCC;">
+                เราใช้ Pi Smart Contract ในการรักษาความโปร่งใสของทุกธุรกรรม ท่านต้องยอมรับการใช้ข้อมูล KYC เพื่อความปลอดภัยตามกฎหมาย AML/CFT (FATF) ก่อนเข้าสู่ระบบ
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="accept_button" class="gold-btn">ยอมรับและดำเนินการต่อ</button>
+                <button id="decline_button" class="transparent-btn">ปฏิเสธ</button>
+            </div>
+            <p style="font-size: 9px; margin-top: 15px; color: var(--color-dark-gold); opacity: 0.8;">
+                Copyright © 2025 Ms. Ramida Moonchai. All Rights Reserved.
+            </p>
         </div>
     </div>
-    
+
+    <div class="header-bar">
+        <span style="display:flex; align-items: flex-end; gap: 8px;">
+            <span class="material-icons header-logo">monetization_on</span>
+            <span class="header-title">Click Pop Shop Pi</span>
+        </span>
+        <a href="#" class="wallet-btn">Connect Pi Wallet</a>
+    </div>
+
+    <div class="container">
+        <div class="hero-section">
+            <h1 class="headline text-gold">รวมใจรัก Pi Network Thailand ยินดีต้อนรับ</h1>
+            <p class="sub-headline">มิติใหม่ 360° ของ Social Commerce และ Service Excellence<br>(Your Gateway to the Future Economy)</p>
+            
+            <div class="pi-coin">
+                <span style="font-size: 50px; font-weight: 900; color: var(--color-dark-purple); transform: rotateY(180deg);">π</span>
+            </div>
+            
+            <div class="gcv-badge">✦ GCV 100% : 1 π = $314,159 USD ✦</div>
+        </div>
+
+        <div class="menu-grid">
+            <div class="menu-card">
+                <span class="card-icon material-icons">language</span>
+                <span class="card-title text-gold">PopSocial</span>
+                <span class="card-subtitle">Global Network</span>
+            </div>
+            <div class="menu-card">
+                <span class="card-icon material-icons">business</span>
+                <span class="card-title text-gold">Pi Modern Trade Hub</span>
+                <span class="card-subtitle">Global Mall</span>
+            </div>
+            <div class="menu-card">
+                <span class="card-icon material-icons">local_shipping</span>
+                <span class="card-title text-gold">PiLogis Hub</span>
+                <span class="card-subtitle">Global Logistics</span>
+            </div>
+            <div class="menu-card">
+                <span class="card-icon material-icons">handyman</span>
+                <span class="card-title text-gold">Pi Pro & Asset Services</span>
+                <span class="card-subtitle">Asset Management</span>
+            </div>
+        </div>
+        
+        <p style="text-align: center; font-size: 9px; color: var(--color-dark-gold); opacity: 0.8; margin-top: 20px; padding-bottom: 10px;">
+            Copyright © 2025 Ms. Ramida Moonchai. All Rights Reserved.
+        </p>
+    </div>
+
+    <div class="accessibility-fab" id="fab_toggle">
+        <span class="fab-icon material-icons">accessibility_new</span>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item">
+            <span class="nav-icon material-icons">home</span>
+            หน้าหลัก
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon material-icons">notifications</span>
+            แจ้งเตือน
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon material-icons">person</span>
+            โปรไฟล์
+        </div>
+        <div class="nav-item">
+            <span class="nav-icon material-icons">settings</span>
+            ตั้งค่า
+        </div>
+    </div>
     <button class="auth-button" id="auth_button" disabled>
         Click to Connect Pi Wallet (Required for Test Token)
     </button>
