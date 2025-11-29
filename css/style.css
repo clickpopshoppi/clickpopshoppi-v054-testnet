@@ -1,0 +1,126 @@
+/* ==========================================================
+   === CSS ARCHITECTURE: UNIVERSAL PIXEL-PERFECT (V25) ===
+   === Moved from inline HTML for Caching and Speed ===
+   ========================================================== */
+:root {
+    /* 1. COLOR TOKENS */
+    --color-gold: #FFD700;
+    --color-dark-gold: #C5A059;
+    --color-primary-violet: #6200EA;
+    --color-dark-bg: #1A0528;
+    --color-nav-bg: rgba(15, 5, 24, 0.98);
+    --color-neon-violet: rgba(138, 43, 226, 0.6);
+    /* 2. LAYOUT METRICS */
+    --coin-size: 120px;
+    --nav-height: 65px; 
+    --header-offset: 100px;
+}
+
+body { 
+    font-family: 'Noto Sans Thai', sans-serif; text-align: center; margin: 0; padding: 0; 
+    background: linear-gradient(180deg, #0F0518 0%, var(--color-dark-bg) 100%); color: white; 
+    overflow-x: hidden;
+    font-size: 16px;
+    padding-bottom: calc(var(--nav-height) + 20px); /* Adjust padding for fixed footer */
+}
+
+/* --- Global Elements & Typography --- */
+.text-gold { color: var(--color-gold); }
+.headline { font-size: 1.6rem; font-weight: 900; margin-bottom: 0.3rem; } 
+.sub-headline { font-size: 0.75rem; font-weight: 500; margin-bottom: 1.5rem; } 
+.app-footer { 
+    position: fixed; 
+    bottom: 0; 
+    width: 100%; 
+    height: 20px; 
+    background: var(--color-dark-bg);
+    color: var(--color-dark-gold); 
+    font-size: 0.5625rem; 
+    opacity: 0.7; 
+    z-index: 999; 
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    margin-bottom: var(--nav-height); /* Lift above the bottom nav */
+}
+
+/* --- Header Bar & Wallet Button --- */
+.header-bar {
+    position: fixed; top: 0; left: 0; width: 100%; height: 60px; padding-top: 40px; 
+    display: flex; justify-content: space-between; align-items: flex-end; 
+    padding-left: 16px; padding-right: 16px; 
+    background: var(--color-nav-bg); box-shadow: 0 1px 10px rgba(0, 0, 0, 0.5); z-index: 1000;
+}
+.wallet-btn { 
+    padding: 8px 16px; 
+    background: linear-gradient(90deg, var(--color-primary-violet), #B388FF); 
+    color: white; border-radius: 20px; font-weight: 600; font-size: 0.8rem; 
+    text-decoration: none; 
+}
+.container { padding-top: var(--header-offset); max-width: 100vw; }
+
+/* --- PI Coin & GCV Badge (GCV Lock) --- */
+.pi-coin { 
+    width: var(--coin-size); height: var(--coin-size); border-radius: 50%; 
+    background: radial-gradient(circle at center, var(--color-gold) 30%, var(--color-dark-gold) 80%); 
+    animation: spin 12s linear infinite; margin-bottom: 15px; overflow: hidden; 
+    box-shadow: 0 0 15px 5px rgba(255, 215, 0, 0.3);
+    display: flex; justify-content: center; align-items: center; 
+}
+.pi-symbol { font-size: 50px; font-weight: 900; color: var(--color-dark-bg); }
+.gcv-badge { 
+    color: var(--color-gold); border: 1px solid var(--color-gold); padding: 8px 16px; 
+    border-radius: 16px; font-size: 0.8rem; font-weight: 700; 
+    background: rgba(0, 0, 0, 0.5); margin-bottom: 30px; 
+    filter: drop-shadow(0 0 1px var(--color-gold));
+}
+
+/* --- Menu Grid & Cards (Gold/Violet 3D) --- */
+.menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 0 16px; }
+.menu-card {
+    height: 115px; border-radius: 24px; padding: 15px;
+    background: linear-gradient(145deg, #3E104F 0%, #180526 100%);
+    box-shadow: 0px 10px 20px -5px rgba(0, 0, 0, 0.7), 0 0 15px 1px var(--color-neon-violet); 
+    border: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start;
+    position: relative; /* Needed for Anomaly Fix */
+}
+.card-icon { color: var(--color-gold); font-size: 32px; filter: drop-shadow(0 0 1px var(--color-gold)); }
+
+/* --- Footer & Nav Cleanup --- */
+.bottom-nav { 
+    position: fixed; bottom: 0; width: 100%; height: var(--nav-height); 
+    z-index: 1000; display: flex; justify-content: space-around; align-items: center; 
+    border-top: 1px solid var(--color-gold); background: var(--color-nav-bg); 
+}
+.nav-item { color: var(--color-gold); text-align: center; font-size: 0.6rem; filter: drop-shadow(0 0 1px var(--color-gold)); }
+
+/* --- Floating Accessibility Button (The Selling Point - KEPT) --- */
+.accessibility-fab { 
+    position: fixed; bottom: calc(var(--nav-height) + 30px); left: 20px; 
+    width: 50px; height: 50px; border-radius: 50%; background: var(--color-nav-bg); 
+    border: 1px solid var(--color-gold); z-index: 5000; display: flex; 
+    justify-content: center; align-items: center; 
+}
+
+
+/* ==========================================================
+   === CRITICAL UI FIXES (Anomaly Deletion) ===
+   ========================================================== */
+
+/* Fix 1: Delete the persistent Green Checkmark anomaly */
+/* We target the specific green icon color/style used by App Studio's injection */
+/* This rule forcefully hides any persistent green icon that is not part of our design */
+.material-icons[style*="color: #66BB6A"], 
+.material-icons[style*="color: green"], 
+.material-icons[style*="color: rgb(102, 187, 106)"] { 
+    display: none !important; 
+}
+
+/* Fix 2: General cleanup for any hidden injected elements at the bottom right of menu cards */
+.menu-card > *:last-child[style*="position: absolute"] {
+    display: none !important;
+}
+
+
+/* Animations */
+@keyframes spin { from { transform: rotateY(0deg); } to { transform: rotateY(360deg); } }
